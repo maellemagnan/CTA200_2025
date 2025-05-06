@@ -1,0 +1,68 @@
+    1  /cita/local/bin/passwd
+    2  /fs/lustre/scratch/USERNAME
+    3  /fs/lustre/scratch/mmagnan
+    4  mkdir/CTA200_2025
+    5  mkdir CTA200_2025
+    6  /CTA200_2025
+    7  cd CTA200_2025
+    8  ls
+    9  mkdir assignment_1
+   10  ls
+   11  touch README.md
+   12  ls
+   13  vi # CTA200 2025
+   14  pwd
+   15  cd ..
+   16  cd/murray
+   17  cd /murray
+   18  pwd
+   19  cd /cita/home/murray
+   20  cd /cita/
+   21  ls
+   22  cd /cita/h/home/murray
+   23  cd ~
+   24  pwd
+   25  cd /home/murray/
+   26  find  / -name 'Hello_world.py' -print 2>/dev/null
+   27  find . -name 'Hello_world.py' -print 2>/dev/null
+   28  cp /tmp/Hello_world.py /fs/lustre/scratch/mmagnan/CTA200_2025/assignment_1/Hello_world_magnan.py
+   29  pwd
+   30  cp ./tmp/Hello_world.py /fs/lustre/scratch/mmagnan/CTA200_2025/assignment_1/Hello_world_magnan.py
+   31  cd /fs/lustre/scratch/mmagnan/CTA200_2025/assignment_1/
+   32  ls
+   33  module load gcc
+   34  gcc --version
+   35  source /etc/profile.d/modules.sh
+   36  which gcc
+   37  gcc Hello_world_magnan.c -o Hello_world.x
+   38  ls -l Hello_world.x
+   39  ./Hello_world.x
+   40  python3 Hello_world_magnan.py
+   41  pwd
+   42  ls
+   43  python Hello_world_magnan.py
+   44  vi Hello_world_magnan.c
+   45  gcc Hello_world_magnan.c -o Hello_world.x
+   46  vi Hello_world_magnan.c
+   47   gcc Hello_world_magnan.c -o Hello_world.x
+   48  gcc Hello_world_magnan.c -o Hello_world.x
+   49  ./Hello_world.x
+   50  vi Hello_world_magnan.c
+   51  gcc Hello_world_magnan.c -o Hello_world.x
+   52  ./Hello_world.x
+   53  vi Hello_world_magnan.c
+   54  gcc Hello_world_magnan.c -o Hello_world.x
+   55  ./Hello_world.x
+   56  vi Hello_world_magnan.py
+   57  python Hello_world_magnan.py
+   58  ./Hello_world.x > output_c.txt
+   59  python Hello_world_magnan.py > output_python.txt
+   60  cat output_c.txt
+   61  cat output_python.txt
+   62  vi Hello_world_magnan.py
+   63  python Hello_world_magnan.py
+   64  python Hello_world_magnan.py > output_python.txt
+   65  cat output_c.txt
+   66  cat output_python.txt
+   67  ipe the commands you used to do steps 1-7 to a text file by using the history command. Call the file history.txt and place it in the assignment_1 folder.
+   68  history > temp_history.txt
