@@ -1,0 +1,158 @@
+\documentclass[10pt]{article}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{tabto}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[justification=centering]{caption}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{subcaption}
+\usepackage{makecell}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{minted}
+\usepackage[backend=biber, style=apa, url=true]{biblatex}
+\addbibresource{bibliography.bib}
+
+
+\lstset{
+  language=Python,                % Specify the language for syntax highlighting
+  frame=single,                   % Adds a frame around the code
+  basicstyle=\ttfamily,           % Monospaced font
+  keywordstyle=\color{blue},      % Colors keywords
+  commentstyle=\color{green},     % Colors comments
+  stringstyle=\color{red},        % Colors strings
+}
+\usepackage{titlesec}
+
+% Center section titles
+\titleformat{\section}
+  {\normalfont\Large\bfseries\centering} % Format: centered, bold, large font size
+  {\thesection}{1em}{} % Control how section numbers are formatted
+
+% Keep subsection titles left-aligned
+\titleformat{\subsection}
+  {\normalfont\large\bfseries}
+  {\thesubsection}{1em}{} % Control how subsection numbers are formatted
+
+\begin{document}
+
+% Cover Page
+\begin{titlepage}
+    \centering
+    {\Huge \textbf{CTA 200 Assignment 3}} \\[2cm] % Title
+    
+    {\large Maëlle Magnan} \\[0.5cm] % Name
+    Email: maelle.magnan@mail.utoronto.ca \\[0.5cm] % Email
+    Student ID: 1008798598 \\[2cm] % Student ID
+
+    {\large May 13th, 2025} \\[3cm] % Date
+
+    % Optional space for an abstract or summary if needed
+    % \vfill % Fill remaining space if you want the text centered vertically
+\end{titlepage}
+
+
+
+
+\section*{Question One: Mandelbrot Set}
+
+In this question, we investigate the behavior of complex numbers under an iterative mapping defined by the recurrence relation
+\[
+z_{i+1} = z_i^2 + c,
+\]
+where \( c = x + iy \) is a point in the complex plane and \( z_0 = 0 \). This iterative process is central to the visualization of the Mandelbrot set. For each value of \( c \) in the domain \( -2 < x < 2 \), \( -2 < y < 2 \), we track whether the sequence \( \{z_i\} \) remains bounded or diverges. 
+
+We produce two plots: one that distinguishes between points for which the sequence remains bounded versus those for which it diverges, and a second that maps each point to the iteration count at which divergence occurs, represented using a colour map. The iteration is implemented in a standalone Python module, which is imported into the notebook for plotting and analysis.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{madelbrot_set.png}
+    \caption{Points in the complex plane coloured by behaviour under iteration of \( z_{i+1} = z_i^2 + c \). }
+    \label{fig:bounded_diverging}
+\end{figure} 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{mandelbrot_coloured.png}
+    \caption{Points in the complex plane coloured by the iteration number at which divergence occurs. Bounded iterations are giving iteration 50 for better visualization.}
+    \label{fig:divergence_iterations}
+\end{figure}
+
+\section*{Question Two: Lorenz System and Chaos}
+
+In this question, we explore chaotic behavior in deterministic systems by implementing the Lorenz system of differential equations, originally introduced by Edward Lorenz in his 1963 paper. The system models atmospheric convection using a simplified set of three coupled nonlinear ordinary differential equations:
+
+\begin{align}
+    \dot{X} &= -\sigma (X - Y) \\
+    \dot{Y} &= rX - Y - XZ \\
+    \dot{Z} &= -bZ + XY
+\end{align}
+
+We used the standard parameter values given by Lorenz:
+\[
+\sigma = 10, \quad r = 28, \quad b = \frac{8}{3}
+\]
+and initial conditions \( \mathbf{W}_0 = [0, 1, 0] \). Integration was carried out using \texttt{scipy.integrate.solve\_ivp} over a time interval \( t \in [0, 60] \) with step size \( \Delta t = 0.01 \). A function was written to encapsulate the system of equations, and plotted trajectories replicate Lorenz's original figures.
+
+\subsection*{Lorenz Trajectories}
+We reproduced Lorenz’s first figure by plotting each of the components \( Y(t) \) against index \( N = t / \Delta t \). Fig. \ref{fig:lorenz_traj} shows the evolution of the system over time, highlighting the non-periodic behavior typical of chaotic systems.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{lorenz system.png}
+    \caption{The Lorenz system  \( Y(t) \) solution as a function of time for initial condition \( [0, 1, 0] \). }
+    \label{fig:lorenz_traj}
+\end{figure}
+
+\subsection*{Phase Space Projectiona}
+
+We then focused on a smaller time window \( t \in [14, 19] \), using dense sampling (1000 points) to replicate Lorenz’s second figure. We plotted \( X(t) \) against \( Y(t) \) then \( Y(t) \) against \( Z(t) \), revealing the familiar butterfly-shaped attractor.
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[height=5cm]{xy projection.png}
+        \caption{Projection of the Lorenz attractor in the \( XY \)-plane for \( t \in [14, 19] \).}
+        \label{fig:xy projection}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[height=5cm]{yz projection.png}
+        \caption{Projection of the Lorenz attractor in the \( YZ \)-plane for \( t \in [14, 19] \).}
+        \label{fig:yz projection}
+    \end{subfigure}
+\end{figure}
+
+\subsection*{Sensitivity to Initial Conditions}
+
+To demonstrate sensitivity to initial conditions, we integrated the same system using a slightly perturbed initial condition:
+\[
+\mathbf{W}_0' = [0, 1 + 10^{-8}, 0]
+\]
+We computed the Euclidean distance between the two solutions as a function of time:
+\[
+d(t) = \|\mathbf{W}(t) - \mathbf{W}'(t)\|
+\]
+and plotted it on a semilogarithmic scale. The near-linear growth in log-distance reflects exponential divergence as expected based on Lorenz's results.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{distance}
+    \caption{Logarithmic plot of the distance between two Lorenz trajectories with nearly identical initial conditions. The straight-line growth indicates exponential sensitivity.}
+    \label{fig:lorenz_divergence}
+\end{figure}
+
+
+\end{document}
+
+
+
