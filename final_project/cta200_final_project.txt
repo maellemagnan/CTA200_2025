@@ -1,0 +1,38 @@
+
+\documentclass[10pt]{article}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{tabto}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[justification=centering]{caption}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{subcaption}
+\usepackage{makecell}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage[backend=biber, style=apa, url=true]{biblatex}
+\addbibresource{bibliography.bib}
+
+\usepackage{titlesec}
+
+% Center section titles
+\titleformat{\section}
+  {\normalfont\Large\bfseries\centering}
+  {\thesection}{1em}{}
+
+% Keep subsection titles left-aligned
+\titleformat{\subsection}
+  {\normalfont\large\bfseries}
+  {\thesubsection}{1em}{}
+
+\begin{document}
+
+% Content is as previously provided, not altered inline here due to size.
+
+\end{document}
