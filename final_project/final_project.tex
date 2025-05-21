@@ -1,0 +1,177 @@
+\documentclass[10pt]{article}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{tabto}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[justification=centering]{caption}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{subcaption}
+\usepackage{makecell}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage[backend=biber, style=apa, url=true]{biblatex}
+\addbibresource{bibliography.bib}
+
+\usepackage{titlesec}
+
+% Center section titles
+\titleformat{\section}
+  {\normalfont\Large\bfseries\centering} % Format: centered, bold, large font size
+  {\thesection}{1em}{} % Control how section numbers are formatted
+
+% Keep subsection titles left-aligned
+\titleformat{\subsection}
+  {\normalfont\large\bfseries}
+  {\thesubsection}{1em}{} % Control how subsection numbers are formatted
+
+\begin{document}
+
+% Cover Page
+\begin{titlepage}
+    \centering
+    {\Huge \textbf{CTA 200 Final Project}} \\[2cm] % Title
+    
+    {\large Maëlle Magnan} \\[0.5cm] % Name
+    Email: maelle.magnan@mail.utoronto.ca \\[0.5cm] % Email
+    Student ID: 1008798598 \\[2cm] % Student ID
+
+    {\large May 20th, 2025} \\[3cm] % Date
+
+\end{titlepage}
+
+
+\section*{Introduction}
+For this mini project, we explored galaxy simulations by SQL querying and using APIs to access astrophysical datasets. We began by querying the EAGLE simulation to retrieve key galaxy properties such as stellar mass and star formation rate. First we focused on galaxies at redshift $z = 0 $, then expanding to galaxies within $0 < z < 0.5 $. Later, we performed a second query which included additional photometric features, such as \textit{g}- and \textit{r}-band magnitudes. This allowed us to incorporate galaxy colours into our analysis. We then examined the IllustrisTNG simulation via an API. By analyzing results from both simulations, we compared the star-forming main sequences across different models. Finally, we applied selection criteria to identify galaxies with Milky Way-like properties across the datasets.
+
+
+
+\section{EAGLE redshift zero query}
+The first query retrieved the star formation rates and stellar masses of galaxies from the \texttt{RefL0100N1504 SubHalo} table of the
+EAGLE database. We limited our search using the \texttt{SnapNum} column, setting this property to 28 which corresponds to a redshift of $z=0$. The same constraint could have been imposed using the redshift column and setting to zero. Using the obtained characteristics, we plotted the star formation rate versus stellar mass, along with a 2D histogram of the same data, colour-coded by galaxy count, as shown in Fig. \ref{fig:eagle_comparison}. 
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Eagle_sfr_vs_stellarmass (3).pdf}
+        \caption{SFR vs. stellar mass at $ z = 0 $.\\\vspace{0.35cm}}  % Add vertical space to balance height
+        \label{fig:eagle_sfr_mass}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Eagle_2d_histogram (2).pdf}
+        \caption{2D histogram of SFR vs. stellar mass at $ z = 0 $.}
+        \label{fig:eagle_hist2d}
+    \end{subfigure}
+    \caption{Comparison of scatter plot and 2D histogram of star formation rate vs. stellar mass in the EAGLE simulation at redshift $z = 0 $.}
+    \label{fig:eagle_comparison}
+\end{figure}
+
+Figure \ref{fig:eagle_sfr_mass} reveals a clear star-forming main sequence where galaxies follow a tight, linear correlation between star formation rate and stellar mass. This main sequence closely matches the expected result from real world observations and demonstrates that in general, more massive galaxies have higher star formation rate. However, the figure also displays a drop off at higher stellar masses indicating that this relationship holds up until a certain cut off. We also observe a scattered population of galaxies with high stellar mass but low star formation rates, consistent with the observationally identified `red and dead' galaxies. 
+
+The plot also shows some unexpected features which do not agree with current observational data. Firstly, there is an excess of low-mass galaxies with high SFRs. These are most likely caused by limited resolution which can lead to unreliable modelling of small halos. Second, there are sharp horizontal and vertical bands at lower stellar masses and star formation rates. These bands are presumably due to artificial cutoffs or feedback implementations within the simulation code. These discrepancies arise in part because the simulation uses simplified sub-grid models to approximate complex physical processes, allowing it to run efficiently over large cosmological volumes at the cost of some physical accuracy. 
+
+\subsection{Stretch Goal: Coloured Galaxies}
+As an extra step, we ran a second query of the same galaxies with redshift $z=0$ including additionaly galactic properties. We extracted both the g and r band magnitudes then plotted the Mass-SFR distribution  coloured by the g-r colour. The result is shown in Fig. \ref{fig:coloured}. 
+
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{Eagle_coloured_sfr_vs_stellarmass (2).pdf}
+    \caption{Star formation rate vs. stellar mass for galaxies in the EAGLE simulation, coloured by g - r colour index.}
+    \label{fig:coloured}
+\end{figure}
+
+In the coloured distribution, galaxies with bluer colours (lower g - r) are located in the star-forming region, while redder galaxies (higher g - r) tend to lie on the quiescent sequence. This colour difference reflects the stellar populations. Blue galaxies contain a higher fraction of young, massive stars, which are short-lived and emit strongly in the blue. Red galaxies are dominated by older, lower-mass stars, which are cooler and redder indicating that active star formation has mostly ceased.
+
+\section{More Properties and Snapshots}
+In section one our query only searched for galaxies at redshift $z=0$. To examine more snapshots, we ran another query, this time searching for galaxies in the redshift range of
+$0<z<0.5$. We then plotted the same Mass-SFR diagram as shown in Fig. \ref{fig:eagle_both_redshifts}. As expected increasing the redshift range outputs a larger amount of galaxies. In this case, the first query at z=0 gave 2 275 510 galaxies whereas the second query with $0<z<0.5$ gave 11 819 412 galaxies. Compared to the subset at  $z = 0$, the full galaxy sample shows a broader spread in star formation rates, especially at lower stellar masses, indicating a mix of quenched and actively star-forming galaxies. The star-forming main sequence is also more dispersed in the full sample, while the $z = 0$ galaxies exhibit a tighter correlation between stellar mass and SFR. This suggests that galaxy populations at different redshifts contribute to greater diversity in star formation activity.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Eagle_redshift_comparison (1).pdf}
+    \caption{Scatter plot  of star formation rate vs. stellar mass in the EAGLE simulation at redshift $z=0$ and for redshift range $0<z<0.5$.}
+    \label{fig:eagle_both_redshifts}
+\end{figure}
+
+
+Selecting galaxies across a range of redshifts is more representative of what we observe in galaxy surveys since observational data captures light from galaxies at various distances and therefore times. The maximum redshift a survey can reach is mainly determined by the sensitivity of the telescope (its flux limit) and the brightness of the galaxies being observed. More sensitive instruments can detect fainter, and thus more distant, galaxies.
+
+\subsection{Stretch Goal}
+The EAGLE simulation outputs a tables containing many more elements than just stellar mass and star formation rate. As such, we can determine the most massive galaxy at a certain redshift and subsequently trace its descendants. In order to find the most massive galaxy at a redshift of $z=0$, we used numpy's where function. Then using the GalaxyID, TopLeafID, and LastProgID of the most massive galaxy, we queried between the GalaxyId and the LastProgID which gave us the number of total descendants. We then found the main branch descendants by following each DescendantID starting from the top leaf and stopping when no further descendant exists or a loop is detected. 
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{@{}ll@{}}
+        \toprule
+        \textbf{Property} & \textbf{Value} \\
+        \midrule
+        GalaxyID of the most massive galaxy & 21379521 \\
+        Total number of descendant galaxies & 194065 \\
+        Number of main branch descendants   & 27 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Summary of the most massive galaxy and its descendant structure.}
+    \label{tab:most_massive_summary}
+\end{table}
+
+
+
+
+\section{Querying Data from IllustrisTNG}
+We also examined a second simulation named IllustrisTNG using an API key instead of SQL. We first queried for galaxies at redshift $z=0$ and found that there were 53 939 galaxies in comparison to EAGLE's 2 275 510. We then plotted these galaxies over the EAGLE simulation to compare in Fig. \ref{fig:illustris_comparison}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{Illustris__comparison (2).pdf}
+    \caption{Comparison of the star formation rate versus stellar mass relation from the Illustris and EAGLE simulations. While both simulations show a star-forming main sequence, the EAGLE simulation features a more distinct population of quenched, high-mass galaxies (red and dead).}
+
+    \label{fig:illustris_comparison}
+\end{figure}
+
+The plot shows noticeable differences between the EAGLE and Illustris simulations. In Illustris ($z = 0 $), there are fewer galaxies with very low star formation rates at high stellar masses, whereas EAGLE contains a more prominent population of these quenched, 'red and dead' galaxies. EAGLE appears to produce a more realistic quenched population consistent with observations of early-type galaxies. Additionally, Illustris does not simulate galaxies with lower stellar mass. 
+
+
+\section{ Isolating Milky Way-like galaxies in the
+galaxy colour-magnitude diagram}
+To identify Milky Way analogs in the simulation, we first selected all central galaxies at redshift $z = 0$ with stellar mass $M_\star > 10^9 \, M_\odot$. From this sample, we isolated galaxies with stellar masses and star formation rates within three standard deviations of current Milky Way estimates: $M_\star = (6.08 \pm 1.14) \times 10^{10} \, M_\odot$ and $\dot{M}_\star = 1.65 \pm 0.19 \, M_\odot\,\text{yr}^{-1}$. These selection criteria yielded a subset of galaxies with properties similar to the Milky Way. We then plotted a colour–magnitude diagram in $g$ versus $g - r$, highlighting the Milky Way analogs as shown in Fig. \ref{fig:mw_analogs}.
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{eagle_mw.pdf}
+        \caption{Scatter plot of star formation rate versus stellar mass at $ z = 0 $ from the EAGLE simulation. Milky Way analogs are shown in blue.}
+        \label{fig:eagle_mw}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{illustris.pdf}
+        \caption{Scatter plot of star formation rate versus stellar mass at $ z = 0 $ from the Illustris simulation. Milky Way analogs are shown in blue.}
+        \label{fig:illustris_mw}
+    \end{subfigure}
+    \caption{Comparison of Milky Way analogs in the EAGLE and Illustris simulations at redshift $z = 0 $. Both panels show star formation rate versus stellar mass, highlighting how the Milky Way occupies a narrow region of the main sequence.}
+    \label{fig:mw_analogs}
+\end{figure}
+
+
+The resulting distributions show that Milky Way analogs occupy a relatively narrow region in colour–magnitude space, suggesting that the Milky Way is not an outlier but rather a typical star-forming galaxy in terms of its stellar mass and colour. This implies that the Milky Way lies along the galaxy main sequence and reinforces the idea that its properties are representative of normal disk galaxies within large-scale simulations.
+
+\end{document}
+
+
+
